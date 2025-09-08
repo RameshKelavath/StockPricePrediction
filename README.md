@@ -1,100 +1,111 @@
-# 📈 Stock Price Prediction (TCS & Infosys)
+# Stock Price Prediction — TCS & Infosys (ARIMA · ARIMAX · LSTM)
 
-This project explores **time series forecasting** of stock prices for two leading IT companies in India — **TCS** and **Infosys**.  
-The objective is to build and compare traditional statistical models (**ARIMA, ARIMAX**) with a deep learning model (**LSTM**) to evaluate forecasting accuracy.
-
----
-
-## 📌 Background and Objective
-
-- Stock market forecasting is challenging due to volatility, seasonality, and external influences.  
-- The aim of this project is to predict **closing prices** of TCS and Infosys stocks and compare model performance.  
-- Models applied: **ARIMA, ARIMAX, LSTM**.  
-- Evaluation based on: **MAE, MSE, RMSE**.
+Forecasting daily **Close** prices for **TCS** and **Infosys** using classical time-series models (ARIMA, ARIMAX) and a deep-learning model (LSTM).  
+The project compares statistical vs deep learning methods for forecasting accuracy.
 
 ---
 
-## 🗂 Project Structure
+## 🔎 Introduction
 
-The project is organized into step-by-step Jupyter notebooks:
+The goal of this project is to **build, compare, and evaluate** three forecasting approaches:
 
-1. **`1_Data_Preprocessing.ipynb`**  
-   - Dropped unnecessary columns (`Trades`).  
-   - Handled missing values in `Deliverable Volume` and `% Deliverable` (using `ffill`/`bfill`).  
-   - Converted `Date` to datetime, set as index, sorted by date.  
-   - Visualized TCS vs Infosys closing prices.  
+- **ARIMA** – univariate forecasting using only the Close price.  
+- **ARIMAX** – ARIMA with an **exogenous** driver (**Open** price).  
+- **LSTM** – a neural network that models non-linear temporal dependencies.
 
-2. **`2_Stationarity_checks.ipynb`**  
-   - Performed **ADF Test** for stationarity.  
-   - Differencing applied where necessary (`d=1` for TCS, Infosys already stationary).  
-   - Generated **ACF** and **PACF** plots to guide ARIMA/ARIMAX parameter selection.  
-
-3. **`3_ARIMA_Model.ipynb`**  
-   - Built univariate ARIMA models using `Close` price only.  
-   - Trained on 80% data, tested on 20%.  
-
-4. **`4_ARIMAX_Model.ipynb`**  
-   - Extended ARIMA by including `Open` price as **exogenous variable**.  
-   - Trained on 80% data, tested on 20%.  
-
-5. **`5_LSTM_Model.ipynb`**  
-   - Implemented LSTM (Long Short-Term Memory) neural network.  
-   - Normalized stock prices, reshaped into 3D sequences.  
-   - Captured sequential dependencies for improved forecasting.  
-
-6. **`Final_Stock_Price_Prediction_Project.ipynb`**  
-   - Combined pipeline with preprocessing → stationarity checks → ARIMA → ARIMAX → LSTM → evaluation.
+All models are evaluated with **MAE**, **MSE**, and **RMSE** on a held-out test split.
 
 ---
 
-## ⚙️ Models Implemented
+## 📁 Repository Structure
 
-- **ARIMA**: Autoregressive Integrated Moving Average, univariate on `Close`.  
-- **ARIMAX**: ARIMA with `Open` as exogenous variable.  
-- **LSTM**: Deep learning model for sequence prediction, capturing temporal dependencies.  
-
----
-
-## 📊 Evaluation Metrics
-
-All models were evaluated using:
-
-- **MAE**: Mean Absolute Error  
-- **MSE**: Mean Squared Error  
-- **RMSE**: Root Mean Squared Error  
-
-These metrics quantify prediction errors and help compare statistical vs deep learning approaches.
+1_Data_Preprocessing.ipynb
+2_Stationarity_checks.ipynb
+3_ARIMA_Model.ipynb
+4_ARIMAX_Model.ipynb
+5_LSTM_Model.ipynb
+Final_Stock_Price_Prediction_Project.ipynb # end-to-end notebook
+INFY.csv
+TCS.csv
+README.md
+LICENSE
 
 ---
 
-## 📈 Results
+## 🧹 Data Preparation (`1_Data_Preprocessing.ipynb`)
 
-| Model   | MAE     | MSE       | RMSE    |
-|---------|---------|-----------|---------|
-| ARIMA   | 25.4    | 980.2     | 31.3    |
-| ARIMAX  | 22.8    | 910.6     | 30.1    |
-| LSTM    | 15.6    | 620.4     | 24.9    |
-
-- **LSTM** outperformed ARIMA and ARIMAX in terms of forecasting accuracy.  
-- **ARIMAX** showed improvement over ARIMA by including `Open` as an exogenous variable.  
-- Visual comparisons of predicted vs actual prices confirmed that **LSTM captured trends more effectively**.  
-
-> 📌 *Note: The metrics above are based on the test dataset split (20% of the data). Values may vary if retrained.*
+- Dropped unused column **`Trades`**.
+- Filled missing values in **`Deliverable Volume`** and **`% Deliverable`** using `ffill` / `bfill`.
+- Parsed **`Date`** to `datetime`, set it as **index**, and sorted chronologically.
+- Plotted TCS vs Infosys closing prices over time.
 
 ---
 
-## 🛠 Tech Stack
+## 🧪 Stationarity & Diagnostics (`2_Stationarity_checks.ipynb`)
 
-- **Programming Language:** Python  
-- **Libraries:** pandas, numpy, matplotlib, seaborn, statsmodels, scikit-learn, tensorflow/keras  
-- **Models:** ARIMA, ARIMAX, LSTM  
-- **Tools:** Jupyter Notebook, Google Colab, GitHub  
+- Performed **ADF (Augmented Dickey–Fuller)** tests.  
+  - **TCS**: non-stationary → stationary after **first differencing** (`d=1`).  
+  - **Infosys**: already stationary without differencing.
+- Used **ACF/PACF** plots to guide choices of **(p, d, q)**.
 
 ---
 
-## 🚀 How to Run
+## 🧠 Models Implemented
 
-1. Clone the repository:
+### 1) ARIMA (`3_ARIMA_Model.ipynb`)
+- Univariate model on **Close** only.  
+- Train/test split: **80% / 20%**.  
+- Forecasted Close price for the test set.
+
+### 2) ARIMAX (`4_ARIMAX_Model.ipynb`)
+- ARIMA with **Open** price as an **exogenous** variable.  
+- Same split protocol; target is Close price.
+
+### 3) LSTM (`5_LSTM_Model.ipynb`)
+- Data normalized & reshaped into 3D sequences.  
+- Sequence-to-one prediction of Close prices.
+
+---
+
+## 📏 Evaluation Metrics
+
+- **MAE** – Mean Absolute Error  
+- **MSE** – Mean Squared Error  
+- **RMSE** – Root Mean Squared Error  
+
+---
+
+## 📊 Results
+
+| Model  | Company |   MAE   |     MSE     |  RMSE  |
+|--------|---------|---------|-------------|--------|
+| ARIMA  | TCS     | 496.37  | 285756.22   | 534.56 |
+| ARIMA  | Infosys | 396.71  | 231179.31   | 480.81 |
+| ARIMAX | TCS     | 28.78   | 1465.50     | 38.28  |
+| ARIMAX | Infosys | 9.91    | 191.06      | 13.82  |
+| LSTM   | TCS     | 54.68   | 13201.82    | 114.90 |
+| LSTM   | Infosys | 30.54   | 1780.10     | 42.19  |
+
+**Insights:**
+- **ARIMAX** significantly outperforms both ARIMA and LSTM, thanks to including **Open** as an exogenous variable.  
+- **LSTM** performs better than ARIMA, capturing non-linear dependencies.  
+- **ARIMA** (Close only) has the **highest errors**, showing its limitations on volatile stock data.  
+
+---
+
+## ✅ Conclusion
+
+This project compared **ARIMA**, **ARIMAX**, and **LSTM** models for predicting stock prices of **TCS** and **Infosys**.  
+
+- **ARIMAX performed the best**, as the inclusion of the **Open** price improved accuracy.  
+- **LSTM** performed better than **ARIMA**, leveraging deep learning for non-linear patterns, but still fell short of ARIMAX.  
+- **ARIMA** had the **highest errors**, making it less effective for volatile data.  
+
+---
+
+## 🛠️ How to Run
+
+1. Clone the repo  
    ```bash
    git clone https://github.com/RameshKelavath/StockPricePrediction.git
    cd StockPricePrediction
