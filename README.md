@@ -19,16 +19,16 @@ All models are evaluated with **MAE**, **MSE**, and **RMSE** on a held-out test 
 
 ## Repository Structure
 
-1_Data_Preprocessing.ipynb
-2_Stationarity_checks.ipynb
-3_ARIMA_Model.ipynb
-4_ARIMAX_Model.ipynb
-5_LSTM_Model.ipynb
-Final_Stock_Price_Prediction_Project.ipynb     # end-to-end notebook
-INFY.csv
-TCS.csv
-README.md
-LICENSE
+1_Data_Preprocessing.ipynb  
+2_Stationarity_checks.ipynb  
+3_ARIMA_Model.ipynb  
+4_ARIMAX_Model.ipynb  
+5_LSTM_Model.ipynb  
+Final_Stock_Price_Prediction_Project.ipynb    # end-to-end notebook  
+INFY.csv  
+TCS.csv  
+README.md  
+LICENSE  
 
 
 ---
